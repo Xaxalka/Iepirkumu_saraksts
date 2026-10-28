@@ -9,7 +9,7 @@
         android:id="@+id/headerBackground"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="@color/primary_green"
+        android:background="@drawable/header_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -51,6 +51,82 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photo_label"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:background="@drawable/search_background"
+                    android:backgroundTint="#E8F5E9">
+
+                    <TextView
+                        android:id="@+id/photoPlaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="📷"
+                        android:textSize="36sp" />
+
+                    <ImageView
+                        android:id="@+id/photoPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/photo_preview"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/photoGalleryButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/photo_gallery"
+                        android:textAllCaps="false"
+                        android:textColor="@color/secondary_green"
+                        app:cornerRadius="20dp" />
+
+                    <Button
+                        android:id="@+id/photoCameraButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/photo_camera"
+                        android:textAllCaps="false"
+                        android:textColor="@color/secondary_green"
+                        app:cornerRadius="20dp" />
+
+                    <Button
+                        android:id="@+id/photoRemoveButton"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/photo_remove"
+                        android:textAllCaps="false"
+                        android:textColor="@color/delete_red"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -137,6 +213,7 @@
                     android:src="@android:drawable/ic_menu_recent_history" />
 
                 <TextView
+                    android:id="@+id/reminderText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -145,8 +222,10 @@
                     android:textColor="@color/text_gray" />
 
                 <TextView
+                    android:id="@+id/reminderAction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="8dp"
                     android:text="@string/chevron_right"
                     android:textColor="@color/text_gray"
                     android:textSize="18sp"

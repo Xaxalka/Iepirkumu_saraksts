@@ -13,9 +13,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
         db = AppDatabase.getInstance(this);
+
+        int savedId = Session.userId(this);
+        if (savedId != -1) {
+            User saved = db.userDao().getById(savedId);
+            if (saved != null) {
+                openHome(saved);
+                return;
+            }
+            Session.logout(this);
+        }
+        setContentView(R.layout.activity_login);
 
         usernameInput = findViewById(R.id.usernameInput);
         passwordInput = findViewById(R.id.passwordInput);
@@ -29,11 +38,10 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            User user = db.userDao().getUser(username, password);
-            if (user != null) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+            User user = db.userDao().getUserByUsername(username);
+            if (user != null && PasswordHasher.verify(password, user.password)) {
+                Session.login(this, user.id);
+                openHome(user);
             } else {
                 Toast.makeText(this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
             }
@@ -43,5 +51,12 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void openHome(User user) {
+        Intent intent = new Intent(this, user.isAdmin ? AdminActivity.class : MainActivity.class);
+        intent.putExtra(AdminActivity.EXTRA_USER_ID, user.id);
+        startActivity(intent);
+        finish();
     }
 }

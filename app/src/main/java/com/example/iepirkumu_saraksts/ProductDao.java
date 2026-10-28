@@ -18,8 +18,26 @@ public interface ProductDao {
     @Query("SELECT * FROM products WHERE name LIKE '%' || :searchQuery || '%' ORDER BY id DESC")
     List<Product> searchProducts(String searchQuery);
 
+    @Query("SELECT * FROM products WHERE reminderTime > 0 AND isChecked = 0")
+    List<Product> getWithReminders();
+
+    @Query("SELECT COUNT(*) FROM products")
+    int count();
+
+    @Query("SELECT COUNT(*) FROM products WHERE isChecked = 1")
+    int countChecked();
+
+    @Query("SELECT * FROM products WHERE isChecked = 1")
+    List<Product> getChecked();
+
+    @Query("DELETE FROM products WHERE isChecked = 1")
+    void deleteChecked();
+
+    @Query("DELETE FROM products")
+    void deleteAll();
+
     @Insert
-    void insert(Product product);
+    long insert(Product product);
 
     @Update
     void update(Product product);

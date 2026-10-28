@@ -41,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            User newUser = new User(username, password);
+            User newUser = new User(username, PasswordHasher.hash(password));
             db.userDao().insert(newUser);
 
             Toast.makeText(this, R.string.registration_success, Toast.LENGTH_SHORT).show();

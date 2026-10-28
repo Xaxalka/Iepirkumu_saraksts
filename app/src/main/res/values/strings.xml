@@ -61,4 +61,63 @@
     <string name="passwords_dont_match">Paroles nesakrīt</string>
     <string name="registration_success">Reģistrācija veiksmīga</string>
     <string name="fill_all_fields">Lūdzu, aizpildiet visus laukus</string>
+    <string name="enter_name">Lūdzu ievadiet nosaukumu</string>
+    <string name="enter_amount">Lūdzu ievadiet daudzumu</string>
+    <string name="amount_must_be_number">Daudzumam jābūt skaitlim</string>
+    <string name="reminder_title">Neaizmirstiet nopirkt</string>
+    <string name="reminder_channel">Atgādinājumi</string>
+    <string name="reminder_past">Izvēlieties laiku nākotnē</string>
+    <string name="reminder_clear">Noņemt atgādinājumu</string>
+    <string name="reminder_format">dd.MM.yyyy HH:mm</string>
+    <string name="admin_title">Administratora panelis</string>
+    <string name="admin_stats">Lietotāji: %1$d · Produkti: %2$d · Nopirkti: %3$d</string>
+    <string name="admin_users">Lietotāji</string>
+    <string name="admin_open_list">Atvērt iepirkumu sarakstu</string>
+    <string name="admin_clear_bought">Dzēst nopirktos produktus</string>
+    <string name="admin_clear_all">Dzēst visus produktus</string>
+    <string name="admin_change_password">Mainīt savu paroli</string>
+    <string name="admin_logout">Iziet</string>
+    <string name="admin_role">administrators</string>
+    <string name="admin_reset_password">Atiestatīt paroli</string>
+    <string name="admin_delete_user">Dzēst lietotāju</string>
+    <string name="admin_new_password">Jauna parole</string>
+    <string name="admin_confirm">Vai tiešām?</string>
+    <string name="admin_cannot_delete_admin">Administratoru dzēst nevar</string>
+    <string name="admin_done">Gatavs</string>
+    <string name="cancel">Atcelt</string>
+    <string name="ok">Labi</string>
+    <string name="empty_list">🛒\nSaraksts ir tukšs.\nNospiediet \"+\", lai pievienotu produktu.</string>
+    <string name="product_deleted">Produkts izdzēsts</string>
+    <string name="undo">Atsaukt</string>
+    <string name="help_subtitle">Īsa pamācība darbam ar sarakstu</string>
+    <string name="help_version">Versija %1$s</string>
+    <string-array name="help_icons">
+        <item>➕</item>
+        <item>✅</item>
+        <item>🗑️</item>
+        <item>🗂️</item>
+        <item>📴</item>
+        <item>👆</item>
+        <item>⏰</item>
+        <item>✨</item>
+        <item>🔍</item>
+    </string-array>
+    <string-array name="help_texts">
+        <item>@string/palidziba_1</item>
+        <item>@string/palidziba_2</item>
+        <item>@string/palidziba_3</item>
+        <item>@string/palidziba_4</item>
+        <item>@string/palidziba_5</item>
+        <item>Lai ātri izdzēstu produktu, pavelciet to sāņus. Ja kļūdījāties, spiediet \"Atsaukt\".</item>
+        <item>Produktam var iestatīt atgādinājumu: izvēlieties datumu un laiku, un lietotne atsūtīs paziņojumu.</item>
+        <item>Ievadot nosaukumu, kategorija un attēls tiek izvēlēti automātiski, ja produkts ir pazīstams.</item>
+        <item>Meklēšanas laukā var ātri atrast produktu pēc nosaukuma.</item>
+    </string-array>
+    <string name="photo_gallery">Galerija</string>
+    <string name="photo_camera">Kamera</string>
+    <string name="photo_remove">Noņemt</string>
+    <string name="photo_label">Foto (nav obligāts)</string>
+    <string name="photo_error">Neizdevās ielādēt foto</string>
+    <string name="photo_no_camera">Kamera nav pieejama</string>
+    <string name="photo_preview">Produkta foto</string>
 </resources>

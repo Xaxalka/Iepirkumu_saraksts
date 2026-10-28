@@ -1,20 +1,29 @@
 package com.example.iepirkumu_saraksts;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import com.google.android.material.snackbar.Snackbar;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
+import com.google.android.material.button.MaterialButton;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ProductAdapter.OnProductActionListener {
@@ -24,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
     private List<Product> allProducts = new ArrayList<>();
     private String currentCategory = "Visi";
     private String currentSearchQuery = "";
+    private TextView emptyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
 
         db = AppDatabase.getInstance(this);
 
+        emptyText = findViewById(R.id.emptyText);
         recyclerView = findViewById(R.id.itemsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductAdapter(new ArrayList<>(), this);
@@ -53,12 +64,14 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
             public void afterTextChanged(Editable s) {}
         });
 
-        // Category Buttons
+        // Category Buttons (highlight applied by updateCategory)
         findViewById(R.id.Visi_button).setOnClickListener(v -> updateCategory("Visi"));
         findViewById(R.id.Partika_button).setOnClickListener(v -> updateCategory(getString(R.string.partika)));
         findViewById(R.id.Dzerieni_button).setOnClickListener(v -> updateCategory(getString(R.string.dzerieni)));
         findViewById(R.id.Sadzive_button).setOnClickListener(v -> updateCategory(getString(R.string.sadzive)));
         findViewById(R.id.Citi_button).setOnClickListener(v -> updateCategory(getString(R.string.citi)));
+
+        updateCategory("Visi");
 
         findViewById(R.id.fabAdd).setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddProductActivity.class);
@@ -67,9 +80,50 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
 
 
         findViewById(R.id.menuIcon).setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HelpActivity.class);
-            startActivity(intent);
+            PopupMenu menu = new PopupMenu(this, v);
+            menu.getMenu().add(0, 1, 0, R.string.palidziba);
+            menu.getMenu().add(0, 2, 1, R.string.admin_logout);
+            menu.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == 1) {
+                    startActivity(new Intent(this, HelpActivity.class));
+                } else {
+                    Session.logout(this);
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                return true;
+            });
+            menu.show();
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv, @NonNull RecyclerView.ViewHolder vh,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int direction) {
+                Product product = adapter.getItem(vh.getAdapterPosition());
+                removeRow(product);
+                Snackbar.make(recyclerView, R.string.product_deleted, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo, v -> {
+                            db.productDao().insert(product);
+                            ReminderScheduler.schedule(MainActivity.this, product);
+                            loadData();
+                        })
+                        .addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar bar, int event) {
+                                // The photo is only removed once the deletion can no longer be undone
+                                if (event != DISMISS_EVENT_ACTION) PhotoStore.delete(product.photoPath);
+                            }
+                        }).show();
+            }
+        }).attachToRecyclerView(recyclerView);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -90,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
             if (allProducts == null) {
                 allProducts = new ArrayList<>();
             }
-            Toast.makeText(this, "Loaded: " + allProducts.size(), Toast.LENGTH_SHORT).show();
             filterAndDisplay();
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +152,17 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
 
     private void updateCategory(String category) {
         currentCategory = category;
+        int[] ids = {R.id.Visi_button, R.id.Partika_button, R.id.Dzerieni_button,
+                R.id.Sadzive_button, R.id.Citi_button};
+        String[] names = {"Visi", getString(R.string.partika), getString(R.string.dzerieni),
+                getString(R.string.sadzive), getString(R.string.citi)};
+        for (int i = 0; i < ids.length; i++) {
+            MaterialButton b = findViewById(ids[i]);
+            boolean selected = names[i].equals(category);
+            b.setBackgroundTintList(ColorStateList.valueOf(selected
+                    ? ContextCompat.getColor(this, R.color.secondary_green) : Color.WHITE));
+            b.setTextColor(selected ? Color.WHITE : Color.BLACK);
+        }
         filterAndDisplay();
     }
 
@@ -116,13 +180,18 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
                 }
             }
         }
+        // Bought items sink to the bottom; the sort is stable so newest stay first.
+        Collections.sort(filteredList, (a, b) -> Boolean.compare(a.isChecked, b.isChecked));
         adapter.setProducts(filteredList);
+        emptyText.setVisibility(filteredList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void onProductChecked(Product product, boolean isChecked) {
         product.isChecked = isChecked;
         db.productDao().update(product);
+        ReminderScheduler.schedule(this, product);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -134,6 +203,12 @@ public class MainActivity extends AppCompatActivity implements ProductAdapter.On
 
     @Override
     public void onProductDelete(Product product) {
+        removeRow(product);
+        PhotoStore.delete(product.photoPath);
+    }
+
+    private void removeRow(Product product) {
+        ReminderScheduler.cancel(this, product);
         db.productDao().delete(product);
         loadData();
     }
