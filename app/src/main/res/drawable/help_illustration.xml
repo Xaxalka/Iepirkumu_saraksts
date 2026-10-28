@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="160dp"
+    android:viewportWidth="240"
+    android:viewportHeight="160">
+    <!-- soft background blobs -->
+    <path android:fillColor="#E8F5E9" android:pathData="M120,80m-76,0a76,76 0,1 1,152 0a76,76 0,1 1,-152 0" />
+    <path android:fillColor="#C8E6C9" android:pathData="M120,80m-56,0a56,56 0,1 1,112 0a56,56 0,1 1,-112 0" />
+    <!-- items sticking out of the basket -->
+    <path android:fillColor="#E53935" android:pathData="M100,62m-13,0a13,13 0,1 1,26 0a13,13 0,1 1,-26 0" />
+    <path android:fillColor="#2E7D32" android:pathData="M100,48l8,-8l2,3l-6,7z" />
+    <path android:fillColor="#FFB300" android:pathData="M132,58m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0" />
+    <path android:fillColor="#8D6E63" android:pathData="M142,38l14,20l-6,4l-14,-20z" />
+    <path android:fillColor="#FFF8E1" android:pathData="M150,44l8,-18l8,0l0,18z" />
+    <path android:fillColor="#90CAF9" android:pathData="M154,28l12,0l0,6l-12,0z" />
+    <!-- cart basket -->
+    <path android:fillColor="#2E7D32" android:pathData="M72,70l96,0l-12,44l-72,0z" />
+    <path android:fillColor="#1B5E20" android:pathData="M82,80l4,0l3,26l-4,0z M104,80l4,0l1,26l-4,0z M126,80l4,0l-1,26l-4,0z M148,80l4,0l-5,26l-4,0z" />
+    <!-- handle -->
+    <path android:strokeColor="#1B5E20" android:strokeWidth="6" android:strokeLineCap="round"
+        android:strokeLineJoin="round" android:pathData="M48,52l18,0l10,62l82,0" />
+    <!-- wheels -->
+    <path android:fillColor="#1B5E20" android:pathData="M90,128m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <path android:fillColor="#1B5E20" android:pathData="M148,128m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+    <path android:fillColor="#FFFFFF" android:pathData="M90,128m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <path android:fillColor="#FFFFFF" android:pathData="M148,128m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+    <!-- check mark badge -->
+    <path android:fillColor="#FFFFFF" android:pathData="M190,40m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0" />
+    <path android:fillColor="#43A047" android:pathData="M190,40m-13,0a13,13 0,1 1,26 0a13,13 0,1 1,-26 0" />
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="3.5" android:strokeLineCap="round"
+        android:strokeLineJoin="round" android:pathData="M183,40l5,5l9,-10" />
+</vector>
